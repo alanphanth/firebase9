@@ -2,7 +2,7 @@
 import { initializeApp } from 'firebase/app'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
+import { getFirestore, collection, getDocs } from 'firebase/firestore'
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyBrvQDxhOm2YFo9R2f50GB3nb1oIAyKPzU',
@@ -14,4 +14,22 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
+initializeApp(firebaseConfig)
+
+// Initialize services
+const db = getFirestore()
+// Collection ref
+const colRef = collection(db, 'books')
+// Get collection data
+getDocs(colRef)
+  .then((snapshot) => {
+    // console.log(snapshot.docs)
+    let books = []
+    snapshot.docs.forEach((doc) => {
+      books.push({ ...doc.data(), id: doc.id })
+    })
+    console.log(books)
+  })
+  .catch((err) => {
+    console.log(err.message)
+  })
